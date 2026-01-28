@@ -26,12 +26,10 @@ class VoxAnimaliAdvanced(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # Window Setup
         self.title("VoxAnimali AI v2.0 - Advanced Neural Translator")
         self.geometry("950x750")
         ctk.set_appearance_mode("dark")
         
-        # Theme Colors
         self.primary_blue = "#1f6aa5"
         self.accent_green = "#2ecc71"
         self.bg_dark = "#121212"
@@ -40,7 +38,6 @@ class VoxAnimaliAdvanced(ctk.CTk):
         self.configure(fg_color=self.bg_dark)
         self.grid_columnconfigure(0, weight=1)
 
-        # 1. Top Navigation Bar
         self.top_bar = ctk.CTkFrame(self, height=80, fg_color=self.card_bg, corner_radius=0)
         self.top_bar.pack(fill="x")
         
@@ -49,19 +46,15 @@ class VoxAnimaliAdvanced(ctk.CTk):
                                        text_color=self.primary_blue)
         self.title_label.pack(pady=10)
 
-        # 2. Results Dashboard
         self.dashboard = ctk.CTkFrame(self, fg_color="transparent")
         self.dashboard.pack(pady=30, padx=40, fill="x")
 
-        # Species Display Card
         self.species_card = self.create_glass_card(self.dashboard, "SPECIES DETECTED", "Waiting...", self.primary_blue)
         self.species_card.pack(side="left", padx=15, expand=True, fill="both")
 
-        # Mood Display Card
         self.mood_card = self.create_glass_card(self.dashboard, "EMOTIONAL STATE", "Waiting...", self.accent_green)
         self.mood_card.pack(side="right", padx=15, expand=True, fill="both")
 
-        # 3. Status & Progress
         self.status_label = ctk.CTkLabel(self, text="System Ready - Tap to Translate", font=("Arial", 12), text_color="gray")
         self.status_label.pack(pady=(10, 0))
         
@@ -69,7 +62,6 @@ class VoxAnimaliAdvanced(ctk.CTk):
         self.progress.set(0)
         self.progress.pack(pady=10)
 
-        # 4. AI Interpretation Area
         self.output_container = ctk.CTkFrame(self, fg_color=self.card_bg, corner_radius=25, border_width=1, border_color="#333333")
         self.output_container.pack(pady=10, padx=60, fill="both", expand=True)
         
@@ -81,7 +73,6 @@ class VoxAnimaliAdvanced(ctk.CTk):
                                           text_color="#E0E0E0", wrap="word", border_width=0)
         self.text_output.pack(pady=15, padx=30)
 
-        # 5. Main Action Button
         self.listen_btn = ctk.CTkButton(self, text="🎙 START NEURAL CAPTURE", 
                                         command=self.start_thread, 
                                         height=65, width=400, corner_radius=32,
@@ -103,7 +94,6 @@ class VoxAnimaliAdvanced(ctk.CTk):
         return card
 
     def start_thread(self):
-        # UI freeze se bachne ke liye threading
         threading.Thread(target=self.run_logic, daemon=True).start()
 
     def run_logic(self):
@@ -112,7 +102,6 @@ class VoxAnimaliAdvanced(ctk.CTk):
             self.progress.set(0.1)
             self.status_label.configure(text="Capturing acoustic signatures...", text_color=self.primary_blue)
             
-            # --- 1. Audio Recording ---
             fs, duration = 16000, 4
             rec = sd.rec(int(duration * fs), samplerate=fs, channels=1)
             sd.wait()
@@ -140,7 +129,6 @@ class VoxAnimaliAdvanced(ctk.CTk):
             rms = np.sqrt(np.mean(audio_data**2))
             emotion_name = "💢 ALERT" if rms > 0.07 else "💖 HAPPY"
 
-            # --- 4. LLM Translation with Timeout Control ---
             self.status_label.configure(text="Synthesizing Human Speech...", text_color=self.accent_green)
             self.progress.set(0.7)
             
@@ -152,9 +140,7 @@ class VoxAnimaliAdvanced(ctk.CTk):
                     "parameters": {"max_new_tokens": 45, "temperature": 0.7},
                     "options": {"wait_for_model": True} # Wait for model to load
                 }
-                
-                # Added timeout of 20 seconds
-                response = requests.post(HF_API_URL, headers=headers, json=payload, timeout=20)
+                                response = requests.post(HF_API_URL, headers=headers, json=payload, timeout=20)
                 
                 if response.status_code == 200:
                     human_text = response.json()[0]['generated_text'].split("<|assistant|>\n")[-1].strip()
