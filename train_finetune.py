@@ -35,7 +35,7 @@ y = np.array(y)
 
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Input(shape=(1024,)), # YAMNet embedding size
+    tf.keras.layers.Input(shape=(1024,)),
     
     tf.keras.layers.Dense(512, activation='relu'),
     tf.keras.layers.BatchNormalization(), 
