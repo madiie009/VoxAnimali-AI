@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, classification_report
 
-# 1. Load Pre-trained YAMNet
 yamnet_model = hub.load('https://tfhub.dev/google/yamnet/1')
 
 def get_yamnet_embeddings(file_path):
@@ -20,7 +19,7 @@ def get_yamnet_embeddings(file_path):
         return None
 
 X, y = [], []
-print("Extracting features... Please wait.")
+print("Extracting features...")
 
 for label_idx, label in enumerate(['dog', 'cat']):
     folder = f"augmented_data/{label}"
@@ -77,7 +76,7 @@ plt.title('Model Loss')
 plt.legend()
 plt.show()
 
-# 5. Confusion Matrix (Detail Reporting)
+# 5. Confusion Matrix
 y_pred = np.argmax(model.predict(X), axis=1)
 cm = confusion_matrix(y, y_pred)
 plt.figure(figsize=(6,5))
@@ -87,10 +86,9 @@ plt.show()
 
 model.save('animal_finetuned_model_v2.h5')
 print("New Model Saved as 'animal_finetuned_model_v2.h5'")
-# Training ke aakhir mein ye lines add karein
 final_acc = history.history['accuracy'][-1] * 100
 final_val_acc = history.history['val_accuracy'][-1] * 100
 
-print(f"\nTraining mukammal!")
-print(f"Sikhne ki Accuracy (Train): {final_acc:.2f}%")
-print(f"Asli Accuracy (Validation): {final_val_acc:.2f}%")
+print(f"\nTraining Compeleted!")
+print(f"SLearning Accuracy (Train): {final_acc:.2f}%")
+print(f"Real Accuracy (Validation): {final_val_acc:.2f}%")
