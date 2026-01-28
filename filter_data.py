@@ -28,5 +28,5 @@ else:
                 shutil.copy(src_path, dst_path)
                 count += 1
         
-        print(f"Done! {count} files '{animal}' folder mein copied.")
+        print(f"Done! {count} files '{animal}' folder copied.")
 
