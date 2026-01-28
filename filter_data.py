@@ -2,7 +2,6 @@ import pandas as pd
 import os
 import shutil
 
-# Naya path jo aapke folders ke hisab se hai
 audio_src = 'audio/audio/44100' 
 csv_path = 'esc50.csv'
 output_dir = 'data'
@@ -17,7 +16,6 @@ else:
         animal_folder = os.path.join(output_dir, animal)
         os.makedirs(animal_folder, exist_ok=True)
         
-        # CSV se files ke naam nikalna
         animal_files = df[df['category'] == animal]['filename']
         print(f"{animal} ke liye processing shuru...")
 
